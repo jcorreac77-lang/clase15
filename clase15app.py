@@ -92,7 +92,7 @@ if archivo is not None:
     st.write("Explora los resultados de un curso combinando filtros. **Promedio**: 50% de cada evaluación. **Aprobación del ejercicio**: promedio mayor o igual a 4,0.")
 
     # Logo institucional principal simplificado
-    st.image("logo.png", width=120)
+    st.image("uss logo.png", width=120)
 
     col_btn, col_txt = st.columns([1, 2])
     with col_btn:
