@@ -11,24 +11,17 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Configuración inicial de la página
 st.set_page_config(page_title="Dashboard interactivo de notas", layout="wide")
 
-# ==========================================
-# BARRA LATERAL
-# ==========================================
 with st.sidebar:
     st.header("Mi primera barra lateral de Streamlit")
     st.write("¡Hola! Este panel lateral sirve para organizar los controles, la carga de datos y filtros.")
 
-    # Logo institucional simple en la barra lateral
     st.image("uss logo.png", width=120)
 
-    # Botón lateral
     if st.button("Presionar barra"):
         st.success("¡Presionaste el botón de la barra lateral!")
 
-    # Campo de texto lateral
     texto_lateral = st.text_input("Escribe algo en la barra")
     if texto_lateral:
         st.write(f"Contenido ingresado: {texto_lateral}")
@@ -38,21 +31,16 @@ with st.sidebar:
     st.markdown("---")
     st.subheader("Datos y filtros del Dashboard")
 
-    # Carga de archivo CSV desde la interfaz
     archivo = st.file_uploader("Carga el archivo de estudiantes", type=["csv"])
 
-# Validar si el archivo ha sido cargado
 if archivo is not None:
     df = pd.read_csv(archivo)
 
-    # Limpiar nombres de columnas y estandarizar
     df.columns = df.columns.str.strip().str.lower()
 
-    # Asegurar que existan las columnas del CSV subido y calcular el promedio (50% nota_1 y 50% nota_2)
     if 'nota_1' in df.columns and 'nota_2' in df.columns and 'Promedio' not in df.columns:
         df['Promedio'] = df['nota_1'] * 0.5 + df['nota_2'] * 0.5
 
-    # Renombrar columnas para mantener compatibilidad con el resto del código
     renombres = {
         'sexo': 'Sexo',
         'seccion': 'Sección',
@@ -73,7 +61,6 @@ if archivo is not None:
         asistencia_minima = st.number_input("Asistencia mínima (%)", min_value=0, max_value=100, value=0, step=1)
         st.caption("Los filtros se combinan. Quitar ambos sexos deja la selección vacía.")
 
-    # Aplicación de filtros con pandas
     df_filtrado = df[
         (df["Sexo"].isin(sexo_seleccionado)) &
         (df["Promedio"] >= rango_promedio[0]) &
@@ -84,14 +71,10 @@ if archivo is not None:
     if seccion_seleccionada != "Todas":
         df_filtrado = df_filtrado[df_filtrado["Sección"] == seccion_seleccionada]
 
-    # ==========================================
-    # ÁREA PRINCIPAL
-    # ==========================================
     st.title("Dashboard interactivo de notas")
     st.header("¡Hola! Mi primera aplicación de Streamlit")
     st.write("Explora los resultados de un curso combinando filtros. **Promedio**: 50% de cada evaluación. **Aprobación del ejercicio**: promedio mayor o igual a 4,0.")
 
-    # Logo institucional principal simplificado
     st.image("uss logo.png", width=120)
 
     col_btn, col_txt = st.columns([1, 2])
@@ -108,7 +91,6 @@ if archivo is not None:
     sexos_txt = ", ".join(sexo_seleccionado) if sexo_seleccionado else "Ninguno"
     st.caption(f"**Filtros activos:** {sexos_txt} · **Sección:** {seccion_seleccionada} · **Promedio:** {rango_promedio[0]:.1f} a {rango_promedio[1]:.1f} · **Asistencia mínima:** {asistencia_minima}%")
 
-    # Métricas
     total_seleccionados = len(df_filtrado)
     promedio_general = df_filtrado["Promedio"].mean() if total_seleccionados > 0 else 0.0
     aprobacion = (df_filtrado["Promedio"] >= 4.0).mean() * 100 if total_seleccionados > 0 else 0.0
@@ -158,7 +140,6 @@ if archivo is not None:
             st.subheader("Estudiantes seleccionados")
             st.dataframe(df_filtrado, use_container_width=True, hide_index=True)
 
-    # Descarga CSV
     csv_descarga = df_filtrado.to_csv(index=False).encode("utf-8")
     st.download_button(
         label="Descargar selección CSV",
