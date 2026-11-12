@@ -22,7 +22,7 @@ with st.sidebar:
     st.write("¡Hola! Este panel lateral sirve para organizar los controles, la carga de datos y filtros.")
 
     # Logo institucional simple en la barra lateral
-    st.image("logo.png", width=120)
+    st.image("uss logo.png", width=120)
 
     # Botón lateral
     if st.button("Presionar barra"):
